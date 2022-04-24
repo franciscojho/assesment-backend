@@ -1,0 +1,28 @@
+{
+    "name": "assesment-nodejs",
+    "version": "1.0.0",
+    "description": "Make It Real back-end assesment",
+    "main": "src/index.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "dev": "nodemon --watch '*.ts' --exec 'ts-node' ./src/index.ts",
+        "lint": "eslint . --ext .ts",
+        "lint:fix": "eslint . --ext .ts --fix"
+    },
+    "author": "Francisco Huapaya",
+    "license": "ISC",
+    "dependencies": {
+        "typescript": "^4.6.3"
+    },
+    "devDependencies": {
+        "@types/node": "^17.0.25",
+        "@typescript-eslint/eslint-plugin": "^5.20.0",
+        "@typescript-eslint/parser": "^5.20.0",
+        "eslint": "^8.14.0",
+        "eslint-config-prettier": "^8.5.0",
+        "eslint-plugin-prettier": "^4.0.0",
+        "nodemon": "^2.0.15",
+        "prettier": "^2.6.2",
+        "ts-node": "^10.7.0"
+    }
+}
