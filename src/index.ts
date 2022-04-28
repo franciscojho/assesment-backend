@@ -8,7 +8,7 @@ import { errorHandler } from './middlewares/errorHandler'
 import { dbConnection } from './config/database'
 
 const app = express()
-const port = 3000
+const port = process.env.PORT || 8000
 
 app.use(cors())
 app.use(express.json())
