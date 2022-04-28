@@ -2,9 +2,11 @@
     "name": "assesment-nodejs",
     "version": "1.0.0",
     "description": "Make It Real back-end assesment",
-    "main": "src/index.ts",
+    "main": "index.js",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node ./build/index.js",
+        "postinstall": "tsc",
         "dev": "nodemon --watch '*.ts' --exec 'ts-node' ./src/index.ts",
         "lint": "eslint . --ext .ts",
         "lint:fix": "eslint . --ext .ts --fix"
