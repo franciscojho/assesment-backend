@@ -3,7 +3,7 @@
 
 import bcrypt from 'bcrypt'
 import { Request, Response, NextFunction } from 'express'
-import { User } from '../models/user.model'
+import { User } from '../models'
 import { generateJwt } from './../utils'
 
 export const login = async (req: Request, res: Response, next: NextFunction) => {
@@ -28,7 +28,11 @@ export const register = async (req: Request, res: Response, next: NextFunction) 
 
         const hash = await bcrypt.hash(password, 10)
 
-        const { password: pass, ...user } = await User.create({ email, password: hash })
+        await User.create({ email, password: hash })
+
+        const foundUser = await User.findOne({ email }).lean()
+
+        const { password: pass, ...user } = foundUser!
 
         const token = generateJwt(user._id)
 
