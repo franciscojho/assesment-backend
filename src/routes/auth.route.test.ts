@@ -14,7 +14,7 @@ describe('Auth route /POST', () => {
 
     const users = Array.from({ length: 4 }, () => ({
         email: faker.internet.email(),
-        password: faker.internet.password(),
+        password: `P${faker.internet.password(8)}1`,
     }))
 
     it.each([users])('Should register user with status 200 and token', async (user) => {
