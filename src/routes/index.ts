@@ -1,4 +1,4 @@
-import { favRouter } from './fav.route'
+import { favRouter } from './favorite.route'
 import { authRouter } from './auth.route'
 
 export { authRouter, favRouter }
