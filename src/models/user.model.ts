@@ -1,10 +1,10 @@
 import { Schema, model } from 'mongoose'
-import { IUser } from './../interfaces'
+import { IUserModel } from './../interfaces'
 
-const userSchema = new Schema<IUser>({
-    // name: { type: String, required: true },
+const userSchema = new Schema<IUserModel>({
     email: { type: String, required: true },
     password: { type: String, required: true },
+    favoriteLists: [{ type: Schema.Types.ObjectId, ref: 'FavoriteList' }],
 })
 
-export const User = model<IUser>('User', userSchema)
+export const User = model<IUserModel>('User', userSchema)
