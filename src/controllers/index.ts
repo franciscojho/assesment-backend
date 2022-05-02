@@ -1,4 +1,4 @@
-import { createFavorites } from './favorite.controller'
+import { createFavorites, getFavoriteById } from './favorite.controller'
 import { login, register } from './auth.controller'
 
-export { login, register, createFavorites }
+export { login, register, createFavorites, getFavoriteById }
