@@ -8,7 +8,10 @@ export const isAuthenticated = (req: Request, res: Response, next: NextFunction)
     if (bearerToken) {
         const token = bearerToken.split(' ')[1]
         const decoded = verify(token, secret) as JwtPayload
-        if (decoded.id === req.body.userId) return next()
+        if (decoded.id) {
+            req.body = { ...req.body, uid: decoded.id }
+            return next()
+        }
     }
     res.status(401).json({ message: 'Unauthorized' })
 }
