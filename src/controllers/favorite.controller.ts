@@ -53,3 +53,20 @@ export const getFavoriteById: RequestHandler = async (req, res, next) => {
         next(error)
     }
 }
+
+export const deleteFavoriteById: RequestHandler = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        const favoriteList = await FavoriteList.findOneAndDelete({ _id: id })
+
+        if (!favoriteList) throw new NotFoundException('Favorite list not found')
+
+        return res.status(200).json({
+            message: 'Success deleting a favorite list',
+            favoriteList,
+        })
+    } catch (error) {
+        next(error)
+    }
+}

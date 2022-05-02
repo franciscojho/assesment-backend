@@ -5,7 +5,7 @@ import { cleanup, connect, disconnect } from '../config/database'
 
 const api = supertest(app)
 
-describe('Favorite route /POST & /GET', () => {
+describe('Favorite route /POST & /GET & /DELETE', () => {
     let token: string
     let uid: string
 
@@ -53,6 +53,19 @@ describe('Favorite route /POST & /GET', () => {
         const { _id } = resList.body.favoriteList
         const FavoriteList = await api
             .get(`/api/favs/${_id}`)
+            .set('Authorization', `Bearer ${token}`)
+        expect(FavoriteList.statusCode).toBe(200)
+        expect(FavoriteList.body).toHaveProperty('favoriteList')
+    })
+
+    it('Should delete a favorite list', async () => {
+        const resList = await api
+            .post('/api/favs')
+            .send(mockFavoriteList(uid))
+            .set('Authorization', `Bearer ${token}`)
+        const { _id } = resList.body.favoriteList
+        const FavoriteList = await api
+            .delete(`/api/favs/${_id}`)
             .set('Authorization', `Bearer ${token}`)
         expect(FavoriteList.statusCode).toBe(200)
         expect(FavoriteList.body).toHaveProperty('favoriteList')
