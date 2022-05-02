@@ -1,12 +1,13 @@
+import { NotFoundException } from './../errors/index'
 import { RequestHandler } from 'express'
 import { IFavorite } from '../interfaces'
 import { Favorite, FavoriteList, User } from '../models'
 
 export const createFavorites: RequestHandler = async (req, res, next) => {
     try {
-        const { userId, name, favorites } = req.body
+        const { uid, name, favorites } = req.body
 
-        const favoriteList = await FavoriteList.create({ userId, name })
+        const favoriteList = await FavoriteList.create({ uid, name })
 
         const favs = await Favorite.insertMany(
             favorites.map((fav: IFavorite) => ({
@@ -15,7 +16,7 @@ export const createFavorites: RequestHandler = async (req, res, next) => {
             })),
         )
 
-        const user = await User.findOne({ _id: userId })
+        const user = await User.findOne({ _id: uid })
 
         if (favoriteList) {
             favs.map((fav) => favoriteList.favorites.push(fav._id))
@@ -29,6 +30,23 @@ export const createFavorites: RequestHandler = async (req, res, next) => {
 
         return res.status(200).json({
             message: 'Success creating favorites list',
+            favoriteList,
+        })
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getFavoriteById: RequestHandler = async (req, res, next) => {
+    try {
+        const { id } = req.params
+
+        const favoriteList = await FavoriteList.findOne({ _id: id })
+
+        if (!favoriteList) throw new NotFoundException('Favorite list not found')
+
+        return res.status(200).json({
+            message: 'Success getting a favorite list',
             favoriteList,
         })
     } catch (error) {

@@ -5,8 +5,17 @@ import { cleanup, connect, disconnect } from '../config/database'
 
 const api = supertest(app)
 
-describe('Favorite route /POST', () => {
-    beforeAll(async () => await connect())
+describe('Favorite route /POST & /GET', () => {
+    let token: string
+    let uid: string
+
+    beforeAll(async () => {
+        await connect()
+
+        const resUser = await api.post('/auth/local/register').send(mockUser)
+        uid = resUser.body.user._id
+        token = resUser.body.token
+    })
 
     beforeEach(async () => await cleanup())
 
@@ -14,7 +23,7 @@ describe('Favorite route /POST', () => {
 
     const mockUser = {
         email: faker.internet.email(),
-        password: faker.internet.password(20),
+        password: `P${faker.internet.password(8)}1`,
     }
 
     const mockFavoriteList = (userId: string) => ({
@@ -28,14 +37,24 @@ describe('Favorite route /POST', () => {
     })
 
     it('Should create a favorite list with favorites', async () => {
-        const resUser = await api.post('/auth/local/register').send(mockUser)
-        const { _id } = resUser.body.user
-        const token = resUser.body.token
         const resList = await api
             .post('/api/favs')
-            .send(mockFavoriteList(_id))
+            .send(mockFavoriteList(uid))
             .set('Authorization', `Bearer ${token}`)
         expect(resList.statusCode).toBe(200)
         expect(resList.body).toHaveProperty('favoriteList')
+    })
+
+    it('Should get a favorite list', async () => {
+        const resList = await api
+            .post('/api/favs')
+            .send(mockFavoriteList(uid))
+            .set('Authorization', `Bearer ${token}`)
+        const { _id } = resList.body.favoriteList
+        const FavoriteList = await api
+            .get(`/api/favs/${_id}`)
+            .set('Authorization', `Bearer ${token}`)
+        expect(FavoriteList.statusCode).toBe(200)
+        expect(FavoriteList.body).toHaveProperty('favoriteList')
     })
 })

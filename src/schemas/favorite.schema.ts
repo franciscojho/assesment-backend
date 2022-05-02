@@ -9,17 +9,6 @@ const validateUniqueName: CustomValidator = async (name, { req }) => {
 }
 
 export const FavoriteSchema = checkSchema({
-    userId: {
-        in: 'body',
-        notEmpty: {
-            errorMessage: 'userId is required',
-            bail: true,
-        },
-        isMongoId: {
-            errorMessage: 'Invalid user id',
-            bail: true,
-        },
-    },
     name: {
         in: 'body',
         notEmpty: {
